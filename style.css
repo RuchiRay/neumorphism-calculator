@@ -84,26 +84,20 @@ button {
   border-bottom: 2px solid rgba(0, 0, 0, 0.3);
   background: var(--bg);
   position: relative;
-  /* border: 2px solid red; */
+ 
+ 
 }
-#upper-value {
+#values {
   position: absolute;
+   /* border: 2px solid red; */
   right: 10%;
   bottom: 40%;
+  text-align: center;
   font-size: 32px;
   font-family: 'Roboto', sans-serif;
   font-weight: bolder;
   color: var(--color-text);
-}
-#lower-value {
-    position: absolute;
-    right: 10%;
-    bottom: 15%;
-    font-size: 32px;
-    font-family: 'Roboto', sans-serif;
-    font-weight: bolder;
-  color: var(--color-text);
-}
+  }
 
 .keyboard {
   /* height: 400px; */

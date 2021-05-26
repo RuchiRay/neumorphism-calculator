@@ -15,89 +15,109 @@ mode.addEventListener("click", () => {
   }
 });
 
-function getHistory() {
-  return document.getElementById("upper-value").innerHTML;
+function getValues() {
+  return document.getElementById("values").innerHTML;
 }
-function printHistory(num) {
-  document.getElementById("upper-value").innerHTML = num;
+function printValues(num) {
+  document.getElementById("values").innerHTML = num;
 }
-function getOutput() {
-  return document.getElementById("lower-value").innerHTML;
-}
-function printOutput(num) {
-  if (num == "") document.getElementById("lower-value").innerHTML = num;
-  else
-    document.getElementById("lower-value").innerHTML = getFormattedNumber(num);
-}
+
 function getFormattedNumber(num) {
-  if (num == "-"){
-      return ""
-  } 
-  let n = Number(num);
-  let value = n.toLocaleString("en");
-  return value;
+  let num1 = ''
+  let num2 = ''
+  let flag = false;
+  let toBeRemoved = '';
+  let value = ''
+  for(let i=0;i<num.length;i++){
+    let char = num.charAt(i);
+    
+    if(char == '+'||char == '-'||char == '*'||char == '/'){
+      flag = true;
+      toBeRemoved = char;
+    }
+    if(flag==false){
+      num1 = num1+char
+    }
+    else{
+      num2 = num2+char
+    }
+  }
+  if(flag==true){
+    num2 = num2.replace(toBeRemoved,'')
+    console.log('number 1 is',num1);
+    console.log('number 2 is',num2);
+    let n1 = Number(num1);
+    let n2 = Number(num2);
+    let value1 = n1.toLocaleString("en");
+    let value2 = n2.toLocaleString("en");
+    console.log('after changing into local string',value1);
+    console.log('after changing into local string',value2);
+     value = value1+toBeRemoved+value2
+    console.log(value);
+    return value;
+  }
+  else{
+   let n = Number(num)
+   value = n.toLocaleString('en')
+   return value;
+  }
+  
 }
 function reverseNumberFormat(num) {
   return Number(num.replace(/,/g, ""));
 }
-console.log(reverseNumberFormat('34,5'));
-console.log(getFormattedNumber('3456'));
+let values = '';
 let operator = document.getElementsByClassName("operator");
+console.log(operator);
 for (let i = 0;i<operator.length;i++) {
   operator[i].addEventListener("click", (e) => {
-        console.log('id of this is ',operator[i].id);
-    if (operator[i].id == "clear") {
-      printHistory("");
-      printOutput("");
+    console.log('the id is',operator[i].id);
+    if(operator[i].id == 'clear'){
+      values = ""
+      printValues("");
     }
-     else if (operator[i].id == "backspace") {
-         console.log(getOutput());
-      let output = reverseNumberFormat(getOutput()).toString();
-     
-      if (output) {
-        output = output.substr(0, output.length - 1);
-        printOutput(output);
-      }
+    else if(operator[i].id == 'backspace'){
+       let s = getValues()
+       let str = reverseNumberFormat(s) ;
+      str = str.toString()
+      str = str.substr(0,str.length-1);
+      values = str
+      printValues(str)
+    }
+    else if(operator[i].id == '%'){
+      console.log('you are percent id');
+      let n = reverseNumberFormat(getValues())
+      let percent = n/100;
+      printValues(percent.toFixed(4))
     }
     else{
-        let output = getOutput()
-        let history = getHistory();
-        if(output==''&&history!=''){
-            if(isNaN(history[history.length-1])){
-                history = history.substr(0,history.length-1)
-            }
-        }
-        if(output!=''||history!=''){
-            output = output==''?output:reverseNumberFormat(output)
-            history = history+output;
-            if(operator[i].id=='='){
-                let result = eval(history);
-                printOutput(result);
-                printHistory('')
-            }
-            else if(operator[i].id=='%'){
-                let n = reverseNumberFormat(getOutput())
-                let percent = n/100;
-                printOutput(percent.toFixed(4));
-            }
-            else{
-                history = history+operator[i].id;
-                printHistory(history);
-                printOutput('');
-            }
-        }
+      if(operator[i].id!='='){
+        console.log(operator[i].id);
+       values = values+operator[i].id
+       printValues(values)
+         
+      }
+      else{
+        let result = eval(values);
+         if(result.length>14)
+         {
+           result = Number(result);
+           result = result.toFixed(4);
+           result = result.toString();
+         }
+        printValues(getFormattedNumber(result))
+      }
     }
-  });
-}
+    
+  }
+  )}      
+    
 let number = document.getElementsByClassName('number')
 for(let num of number){
-    num.addEventListener('click',()=>{
-        let output = reverseNumberFormat(getOutput());
-            console.log('id of this number is',num.id);
-            console.log( num.innerHTML);
-        if(output!=NaN){
-            output = output+num.id;
-            printOutput(output)
-        }
-    })
+  num.addEventListener('click',()=>{
+    values = values+num.id;
+    console.log(values);
+    printValues(getFormattedNumber(values));
+  })
 }
+    
